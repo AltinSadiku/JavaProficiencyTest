@@ -43,9 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/auth/register/").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/auth/signin/").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/auth/activateUser").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/getAllCoins").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.POST, "/api/auth/signin").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/crypto/getAllCoins").hasAnyAuthority("ADMIN","USER")
+                .antMatchers(HttpMethod.POST,"/api/crypto/markCoin").hasAnyAuthority("ADMIN","USER")
+                .antMatchers(HttpMethod.GET,"/api/crypto/getFavoriteCoins/{userId}").hasAnyAuthority("ADMIN","USER")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

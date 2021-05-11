@@ -19,16 +19,5 @@ public class Role {
     @NotEmpty(message = "Title should not be blank")
     private String title;
 
-  /*  public Role() {
-    }
-
-    public Role(int id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
-    public Role(String admin) {
-        this.title = admin;
-    }*/
 
 }

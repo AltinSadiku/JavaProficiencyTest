@@ -2,7 +2,7 @@ package com.JavaProficiencyTest.JavaProficiencyTest.Controllers;
 
 import com.JavaProficiencyTest.JavaProficiencyTest.Config.JwtTokenProvider;
 import com.JavaProficiencyTest.JavaProficiencyTest.Models.*;
-import com.JavaProficiencyTest.JavaProficiencyTest.Models.LoginResponseDTO;
+import com.JavaProficiencyTest.JavaProficiencyTest.Models.LoginResponseDto;
 import com.JavaProficiencyTest.JavaProficiencyTest.Models.User;
 import com.JavaProficiencyTest.JavaProficiencyTest.Services.UserService;
 import com.JavaProficiencyTest.JavaProficiencyTest.Utils.AccountNotActivatedException;
@@ -39,14 +39,12 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-
     @ApiOperation(value = "User Signin")
     @PostMapping("/auth/signin")
-    public ResponseEntity<LoginResponseDTO> signin(@RequestBody LoginDto loginDto) throws Exception {
+    public ResponseEntity<LoginResponseDto> signin(@RequestBody LoginDto loginDto) throws Exception {
 
         User user = userService.findByUsername(loginDto.getUsername());
-        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+        LoginResponseDto loginResponseDTO = new LoginResponseDto();
 
         if (user != null) {
             if (checkIfValidOldPassword(user.getPassword(), loginDto.getPassword())) {
@@ -90,16 +88,11 @@ public class AuthController {
         return ResponseEntity.status(204).build();
     }
 
-
-
     @ApiOperation(value = "Register User")
     @PostMapping("/auth/register")
     public ResponseEntity<Object> register(@RequestBody UserDto userDto) {
         User user = userService.saveUserDto(userDto);
         return ResponseEntity.status(204).build();
     }
-
-
-
 
 }

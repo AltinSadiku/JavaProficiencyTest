@@ -134,6 +134,15 @@
 			<artifactId>spring-security-web</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>4.3.5</version>
+		</dependency>
+
+
+
 
 	</dependencies>
 
@@ -151,6 +160,19 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>4.3.5</version>
+				<executions>
+					<execution>
+						<configuration>
+							<propertyFile>src/main/resources/application.properties</propertyFile>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>

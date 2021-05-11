@@ -1,6 +1,6 @@
 package com.JavaProficiencyTest.JavaProficiencyTest.Models;
 
-public class LoginResponseDTO {
+public class LoginResponseDto {
 
     private String username;
 

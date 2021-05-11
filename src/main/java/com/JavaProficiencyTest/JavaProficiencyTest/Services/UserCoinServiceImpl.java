@@ -4,7 +4,7 @@ import com.JavaProficiencyTest.JavaProficiencyTest.Models.User;
 import com.JavaProficiencyTest.JavaProficiencyTest.Models.UserCoin;
 import com.JavaProficiencyTest.JavaProficiencyTest.Repository.UserCoinRepository;
 import com.JavaProficiencyTest.JavaProficiencyTest.Repository.UserRepository;
-import com.JavaProficiencyTest.JavaProficiencyTest.Utils.EntryNotFoundException;
+import com.JavaProficiencyTest.JavaProficiencyTest.Utils.UserDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,37 +27,44 @@ public class UserCoinServiceImpl implements UserCoinService{
         this.userCoinRepository = userCoinRepository;
     }
 
-    @Override
-    public UserCoin findCoinByUserId(int userId, String coinId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<UserCoin> cryptoCoin = userCoinRepository.findById(coinId);
 
-        UserCoin userCoin = new UserCoin();
+    @Override
+    public void markCoin(int userId, String coinId) {
+        Optional<User> user = userRepository.findById(userId);
 
         User theUser = null;
-
-        if (user.isPresent()) {
+        if(user.isPresent()) {
             theUser = user.get();
-        } else {
-            throw new EntryNotFoundException("User");
+        }else{
+                throw new UserDoesNotExistException();
+            }
+
+
+        Optional<UserCoin> userCoin = userCoinRepository.findUserCoinByUserIdAndCoinId(userId, coinId);
+        if(!userCoin.isPresent()) {
+            UserCoin userCoinToCreate = new UserCoin();
+            userCoinToCreate.setUserId(userId);
+            userCoinToCreate.setCoinId(coinId);
+
+            userCoinRepository.save(userCoinToCreate);
+        }else {
+            userCoinRepository.delete(userCoin.get());
         }
-
-        UserCoin theCoin = null;
-
-        if (cryptoCoin.isPresent()) {
-            theCoin = cryptoCoin.get();
-        } else {
-            throw new EntryNotFoundException("Coin");
-        }
-
-        userCoin.setCoinId(theCoin.getCoinId());
-        userCoin.setUserId(theCoin.getUserId());
-
-        return userCoin;
     }
-    @Override
-    public String findCoinsByUserId(int userId) {
 
-        return null;
+    @Override
+    public String getFavoriteCoins(int userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        User theUser = null;
+        if(user.isPresent()) {
+            theUser = user.get();
+        }else{
+            throw new UserDoesNotExistException();
+        }
+
+        List<String> coins = userCoinRepository.getCoinsByUserId(userId);
+
+        return String.join(",", coins);
     }
 }
